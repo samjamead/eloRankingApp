@@ -1,0 +1,17 @@
+{
+  "ben": {
+    "name": "Ben Lex",
+    "grip": "Shakehand",
+    "rating": 1032
+  },
+  "fif": {
+    "name": "Justin Fifield",
+    "grip": "Penhold",
+    "rating": 968
+  },
+  "sam": {
+    "name": "Sam Mead",
+    "grip": "Shakehand",
+    "rating": 1000
+  }
+}

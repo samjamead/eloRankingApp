@@ -1,0 +1,19 @@
+// main: main.scss
+
+.btn {
+  padding: 8px 14px;
+  text-decoration: none;
+  color: #fff;
+}
+.btn-success {
+  background: $success;
+  &:hover {
+    background: darken($success, 15%);
+  }
+}
+.btn-error {
+  background: $error;
+  &:hover {
+    background: darken($error, 15%);
+  }
+}
