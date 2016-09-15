@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="description" content="The complete ranking of table tennis players in Scarborough, WA">
-    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,300italic,900' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,300italic,700,900' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="./css/main.min.css">
 
     <title>The Complete Scarborough Table Tennis Rankings</title>
@@ -16,7 +16,7 @@
 
     <header>
       <div class="wrapper">
-        <h1>The Scarborough Table Tennis Ranking</h1>
+        <a href="/"><h1>The Scarborough Table Tennis Ranking</h1></a>
       </div>
     </header>
 
@@ -24,8 +24,10 @@
       <div class="wrapper">
 
         <div id="rankingView">
-          <h2>Current Ranking</h2>
-          <p><a class="btn btn-success" id="newResultButton" href="#">New Result</a>
+          <div class="row space-between" />
+            <h2>Current Ranking</h2>
+            <a class="btn btn-success" id="newResultButton" href="#newresult">New Result</a>
+          </div>
           <hr />
           <table>
             <thead>
@@ -40,12 +42,52 @@
               <!-- Ranking will magically appear here! -->
             </tbody>
           </table>
+
+          <h3>Results</h3>
+
+          <hr />
+
+          <ul id="resultsHistory">
+            <li id="emptyState"><em>Results will magically appear here!</em></li>
+            <!-- History will magically appear here! -->
+          </ul>
+
         </div>
 
         <div id="newResultView">
-          <h2>Submit a New Result</h2>
-          <p><a class="btn btn-error" id="cancelButton" href="#">Cancel</a></p>
+          <div class="row space-between" />
+            <h2>Submit a New Result</h2>
+            <a class="btn btn-error" id="cancelButton" href="#ranking">Cancel</a>
+          </div>
+
           <hr />
+
+          <h3>Who played who?</h3>
+
+          <div class="row">
+            <div class="column text-center">
+              <p>The humble winner:</p>
+              <select id="playerOne">
+                <option value="none"></option>
+                <!-- PLayers will magically appear here! -->
+              </select>
+            </div>
+            <div class="column text-center">
+              <p><strong>Beat</strong></p>
+            </div>
+            <div class="column text-center">
+              <p>The gallant loser:</p>
+              <select id="playerTwo">
+                <option value="none"></option>
+                <!-- Players will magically appear here! -->
+              </select>
+            </div>
+          </div>
+
+          <div class="double-margins text-center">
+            <button id="submitResult" class="btn btn-success">Publish Result</button>
+          </div>
+
         </div>
 
       </div>
@@ -53,27 +95,16 @@
 
     <footer>
       <div class="wrapper">
-        <p>By Sam Mead (<a href="http://mead.fm" target="_blank">mead.fm</a>)</p>
+        <hr />
+        <p>By <a href="http://mead.fm" target="_blank">Sam Mead</a>, with thanks to <a href="https://metinmediamath.wordpress.com/about/" target="_blank">Metin Bektas</a></p>
+        <p>"The process of rating players can be compared to the measurement of the position of a cork bobbing up and down on the surface of agitated water with a yard stick tied to a rope and which is swaying in the wind."</p>
+        <p><em>&mdash; Arpad Elo</em></p>
       </div>
     </footer>
 
   </body>
 
-  <script src="https://www.gstatic.com/firebasejs/3.3.2/firebase.js"></script>
-  <script>
-    // Initialize Firebase
-    var config = {
-      apiKey: "AIzaSyC2GOjmMT9vh_Nuo7QcfbGj4p39am6Yrug",
-      authDomain: "scarborough-table-tennis.firebaseapp.com",
-      databaseURL: "https://scarborough-table-tennis.firebaseio.com",
-      storageBucket: "",
-      messagingSenderId: "189667161472"
-    };
-    firebase.initializeApp(config);
-  </script>
-
   <script src="./scripts/jquery-2.2.4.min.js" ></script>
-  <script src="./scripts/display.js" ></script>
-  <script src="./scripts/ranking.js" ></script>
+  <script src="./scripts/app.js" ></script>
 
 </html>

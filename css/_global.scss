@@ -17,3 +17,10 @@
     background: darken($error, 15%);
   }
 }
+.text-center {
+  text-align: center;
+}
+#resultsHistory {
+  list-style-type: none;
+  padding: 0;
+}
