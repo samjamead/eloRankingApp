@@ -17,7 +17,7 @@ var date = new Date();
 // All the data stuff
 $(document).ready(function() {
 
-  $.getJSON('/data/players.json', function (data) {
+  $.getJSON('./data/players.json', function (data) {
 
     var players = (Object.keys(data).length);
 
