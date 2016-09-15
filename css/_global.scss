@@ -4,6 +4,10 @@
   padding: 8px 14px;
   text-decoration: none;
   color: #fff;
+  background: $brand;
+  &:hover {
+    background: darken($brand, 15%);
+  }
 }
 .btn-success {
   background: $success;
@@ -15,6 +19,12 @@
   background: $error;
   &:hover {
     background: darken($error, 15%);
+  }
+}
+.btn-warning {
+  background: $warning;
+  &:hover {
+    background: darken($warning, 15%);
   }
 }
 .text-center {
