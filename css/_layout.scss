@@ -1,7 +1,6 @@
 // main: main.scss
 
 .row {
-  clear: both;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -19,4 +18,12 @@
 }
 #newResultView {
   display: none;
+}
+@media screen and (max-width: 768px) {
+  #selects {
+    display: block;
+    .columns {
+      margin: 1rem 0;
+    }
+  }
 }
