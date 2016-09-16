@@ -1,50 +1,26 @@
-// App JS
+// AppLocal JS - This app doesn't connect to the Firebase database. It justs
+// reada the data in ../data/players.json
 
+// First some display stuff to change the views
+$("#newResultButton").click(function() {
+    $("#rankingView").hide("slow");
+    $("#newResultView").show("slow");
+});
+
+$("#cancelButton").click(function() {
+    $("#rankingView").show("slow");
+    $("#newResultView").hide("slow");
+});
+
+// But what day is it?!
+var date = new Date();
+
+// All the data stuff
 $(document).ready(function() {
 
-  var firebaseConfig = {
-    apiKey: "AIzaSyC2GOjmMT9vh_Nuo7QcfbGj4p39am6Yrug",
-    authDomain: "scarborough-table-tennis.firebaseapp.com",
-    databaseURL: "https://scarborough-table-tennis.firebaseio.com",
-    storageBucket: "scarborough-table-tennis.appspot.com",
-    messagingSenderId: "189667161472"
-  };
+  $.getJSON('./data/players.json', function (data) {
 
-  firebase.initializeApp(firebaseConfig);
-
-  // First some display stuff to change the views
-  $("#newResultButton").click(function() {
-      $("#rankingView").hide("slow");
-      $("#newResultView").show("slow");
-  });
-
-  $("#cancelButton").click(function() {
-      $("#rankingView").show("slow");
-      $("#newResultView").hide("slow");
-  });
-
-  // But what day is it?!
-  var date = new Date();
-
-  // All the data stuff
-
-  // Variableify the table body
-  const table = $("#rankingTable");
-
-  // The Firebase DB JSON blob
-  const dbRefTable = firebase.database().ref();
-
-  dbRefTable.on('value', function(snapshot) {
-
-    var data = snapshot.val();
-
-    // Dump the old ranking
-    $("#rankingTable").empty();
-
-    // Sanity check
-    console.log(data);
-
-    var playersIDs = (Object.keys(data));
+    var players = (Object.keys(data).length);
 
     function fillTable() {
 
@@ -91,8 +67,6 @@ $(document).ready(function() {
       $("#resultsHistory").append("<li>" + date.toDateString() + " &nbsp;&mdash;&nbsp; <strong>" + p1 + " beat " + p2 + "</strong></option>");
 
       // Initialise some variables because scope
-      var p1ID;
-      var p2ID;
       var p1r;
       var p2r;
       var p1r1;
@@ -101,7 +75,6 @@ $(document).ready(function() {
       // Calculate new Elo ratings (step 1 according to Bektas)
       $.each(data, function(i, player){
         if (p1 == player.name) {
-          p1ID = i;
           p1r = player.rating;
           p1r1 = Math.pow(10, (p1r/400));
         }
@@ -109,7 +82,6 @@ $(document).ready(function() {
       });
       $.each(data, function(i, player){
         if (p2 == player.name) {
-          p2ID = i;
           p2r = player.rating;
           p2r1 = Math.pow(10, (p2r/400));
         }
@@ -139,24 +111,29 @@ $(document).ready(function() {
       // Sanity check
       console.log(p1 +"'s new rating is " + p1n + " and " + p2 + "'s new rating is " + p2n);
 
-      console.log("Testing here: " + dbRefTable.child(p1ID));
+      // Update each player's rating
+      $.each(data, function(i, player){
+        if (p1 == player.name) {
+          player.rating = p1n;
+        }
+        if (p2 == player.name) {
+          player.rating = p2n;
+        }
+      });
 
-      // Write the new player ratings data to the Firebase DB
-      var updates = {};
-      updates['/' + p1ID + '/rating'] = p1n;
-      updates['/' + p2ID + '/rating'] = p2n;
-
-      // Swap the view back to the table
-      $("#rankingView").show("slow");
-      $("#newResultView").hide("slow");
+      // Dump the old ranking
+      $("#rankingTable").empty();
 
       // Reset the player selects
       $('select').prop('selectedIndex', 0);
 
-      return firebase.database().ref().update(updates);
+      // Pump in the new ranking
+      fillTable();
 
+      // Swap the view back to the table
+      $("#rankingView").show("slow");
+      $("#newResultView").hide("slow");
     });
 
   });
-
 });

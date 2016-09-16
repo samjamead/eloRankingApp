@@ -1,4 +1,4 @@
-# eloRankingApp
+# Scarborough Table Tennis Rankings App
 
 ### Roadmap
 
