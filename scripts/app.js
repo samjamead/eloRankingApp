@@ -55,7 +55,7 @@ $(document).ready(function() {
           key:key,
           rating:data[key].rating,
           name:data[key].name,
-          grip:data[key].grip
+          nationality:data[key].nationality
         });
       }
 
@@ -66,7 +66,7 @@ $(document).ready(function() {
       var rank = 1;
       for (var i=0;i<rankedPlayers.length;i++) {
         var player = data[rankedPlayers[i].key];
-        $("#rankingTable").append("<tr><td>" + rank + "</td><td>" + player.name + "</td><td>" + player.grip + "</td><td>" + player.rating + "</td></tr>");
+        $("#rankingTable").append("<tr><td>" + rank + "</td><td>" + player.name + "</td><td>" + player.nationality + "</td><td>" + player.rating + "</td></tr>");
         rank += 1;
       }
     }
