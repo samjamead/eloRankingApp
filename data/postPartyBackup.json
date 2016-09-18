@@ -1,0 +1,81 @@
+{
+  "players" : {
+    "ben" : {
+      "lost" : 0,
+      "name" : "Ben Lex",
+      "nationality" : "British",
+      "played" : 6,
+      "rating" : 1121,
+      "won" : 6
+    },
+    "sam" : {
+      "lost" : 6,
+      "name" : "Sam Mead",
+      "nationality" : "British",
+      "played" : 7,
+      "rating" : 918,
+      "won" : 1
+    },
+    "foo" : {
+      "lost" : 1,
+      "name" : "Fionn O Laoire",
+      "nationality" : "Irish",
+      "played" : 1,
+      "rating" : 966,
+      "won" : 0
+    },
+    "ple" : {
+      "lost" : 1,
+      "name" : "Paddy Lee",
+      "nationality" : "Irish",
+      "played" : 2,
+      "rating" : 994,
+      "won" : 1
+    },
+    "fif" : {
+      "lost" : 0,
+      "name" : "Justin Fifield",
+      "nationality" : "British",
+      "played" : 1,
+      "rating" : 1016,
+      "won" : 1
+    }
+  },
+  "results" : [ {
+    "date" : "Thu Sep 08 2016",
+    "loser" : "Sam Mead",
+    "winner" : "Ben Lex"
+  }, {
+    "date" : "Fri Sep 09 2016",
+    "loser" : "Sam Mead",
+    "winner" : "Ben Lex"
+  }, {
+    "date" : "Sun Sep 11 2016",
+    "loser" : "Sam Mead",
+    "winner" : "Ben Lex"
+  }, {
+    "date" : "Sun Sep 11 2016",
+    "loser" : "Sam Mead",
+    "winner" : "Ben Lex"
+  }, {
+    "date" : "Mon Sep 12 2016",
+    "loser" : "Sam Mead",
+    "winner" : "Ben Lex"
+  }, {
+    "date" : "Fri Sep 16 2016",
+    "loser" : "Fionn O Laoire",
+    "winner" : "Paddy Lee"
+  }, {
+    "date" : "Fri Sep 16 2016",
+    "loser" : "Paddy Lee",
+    "winner" : "Sam Mead"
+  }, {
+    "date" : "Fri Sep 16 2016",
+    "loser" : "Sam Mead",
+    "winner" : "Ben Lex"
+  }, {
+    "date" : "Sat Sep 17 2016",
+    "loser" : "Sam Mead",
+    "winner" : "Justin Fifield"
+  } ]
+}

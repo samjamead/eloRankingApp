@@ -2,6 +2,29 @@
 
 $(document).ready(function() {
 
+  // First some display stuff to change the views
+  $("#newResultButton").click(function() {
+      $("#rankingView").hide("slow");
+      $("#newResultView").show("slow");
+  });
+
+  $(".newPlayerButton").click(function() {
+      $("#rankingView").hide("slow");
+      $("#newResultView").hide("slow");
+      $("#newPlayerView").show("slow");
+  });
+
+  $(".cancelButton").click(function() {
+      $("#newResultView").hide("slow");
+      $("#newPlayerView").hide("slow");
+      $("#rankingView").show("slow");
+  });
+
+  // But what day is it?!
+  var date = new Date();
+
+  today = (date.toDateString());
+
   var firebaseConfig = {
     apiKey: "AIzaSyC2GOjmMT9vh_Nuo7QcfbGj4p39am6Yrug",
     authDomain: "scarborough-table-tennis.firebaseapp.com",
@@ -12,83 +35,50 @@ $(document).ready(function() {
 
   firebase.initializeApp(firebaseConfig);
 
-  // First some display stuff to change the views
-  $("#newResultButton").click(function() {
-      $("#rankingView").hide("slow");
-      $("#newResultView").show("slow");
-  });
-
-  $("#cancelButton").click(function() {
-      $("#rankingView").show("slow");
-      $("#newResultView").hide("slow");
-  });
-
-  // But what day is it?!
-  var date = new Date();
-
-  // All the data stuff
-
-  // Variableify the table body
-  const table = $("#rankingTable");
-
   // The Firebase DB JSON blob
-  const dbRefTable = firebase.database().ref();
+  const dbRef = firebase.database().ref();
 
-  dbRefTable.on('value', function(snapshot) {
+  dbRef.on('value', function(snapshot) {
 
     var data = snapshot.val();
 
-    // Dump the old ranking
-    $("#rankingTable").empty();
+    // Dump everything!
+    $("#rankingTable tbody").empty();
+    $("#totalGames").empty();
+    $("#resultsHistory tbody").empty();
+    $('.playerOption').remove();
 
-    // Sanity check
-    console.log(data);
-
-    var playersIDs = (Object.keys(data));
-
-    function fillTable() {
-
-      // First turn object into array
-      var rankedPlayers = [];
-      for (var key in data) {
-        rankedPlayers.push({
-          key:key,
-          rating:data[key].rating,
-          name:data[key].name,
-          nationality:data[key].nationality
-        });
-      }
-
-      // Now sort it by rating:
-      rankedPlayers.sort(function(x,y){return y.rating - x.rating});
-
-      // Now fill the table
+    function updateRatingTable() {
       var rank = 1;
-      for (var i=0;i<rankedPlayers.length;i++) {
-        var player = data[rankedPlayers[i].key];
-        $("#rankingTable").append("<tr><td>" + rank + "</td><td>" + player.name + "</td><td>" + player.nationality + "</td><td>" + player.rating + "</td></tr>");
+      $.each(data.players, function(i, player) {
+        $("#rankingTable tbody").append("<tr><td>" + rank + "</td><td>" + player.name + "</td><td>" + player.nationality + "</td><td>" + player.won + "</td><td>" + player.lost + "</td><td>" + player.rating + "</td></tr>");
         rank += 1;
-      }
+      });
     }
+    updateRatingTable();
 
-    fillTable();
+    function updateResultsList() {
+      $("#totalGames").append("Total games played: <strong>" + data.results.length + "<strong>" );
+      var results = data.results;
+      results.reverse();
+      $.each(results, function(i, result) {
+        $("#resultsHistory tbody").append("<tr><td>" + result.date + "</td><td>&mdash;</td><td>" + result.winner + " beat " + result.loser + "</td></tr>");
+      });
+    }
+    updateResultsList();
 
-    // Add the players to the new result selects
-    $.each(data, function(i, player){
-      $("#playerOne").append("<option value=" + i + ">" + player.name + "</option>");
-      $("#playerTwo").append("<option value=" + i + ">" + player.name + "</option>");
-    });
+    function updateResultSelects() {
+      $.each(data.players, function(i, player){
+        $(".resultSelect").append("<option class=\"playerOption\" value=" + i + ">" + player.name + "</option>");
+      });
+    }
+    updateResultSelects();
 
-    // The calculation that update's everyone's ratings
     $("#submitResult").click(function() {
 
       // Find out who beat who
       var p1 = $( "#playerOne option:selected" ).text();
       var p2 = $( "#playerTwo option:selected" ).text();
-
-      // Commit it to history
-      $("#emptyState").hide();
-      $("#resultsHistory").append("<li>" + date.toDateString() + " &nbsp;&mdash;&nbsp; <strong>" + p1 + " beat " + p2 + "</strong></option>");
 
       // Initialise some variables because scope
       var p1ID;
@@ -97,19 +87,28 @@ $(document).ready(function() {
       var p2r;
       var p1r1;
       var p2r1;
+      var p1played;
+      var p1won;
+      var p2played;
+      var p2lost;
 
       // Calculate new Elo ratings (step 1 according to Bektas)
-      $.each(data, function(i, player){
+      // We also increment played, won, lost
+      $.each(data.players, function(i, player){
         if (p1 == player.name) {
           p1ID = i;
+          p1played = player.played + 1;
+          p1won = player.won + 1;
           p1r = player.rating;
           p1r1 = Math.pow(10, (p1r/400));
         }
         return p1r1;
       });
-      $.each(data, function(i, player){
+      $.each(data.players, function(i, player){
         if (p2 == player.name) {
           p2ID = i;
+          p2played = player.played + 1;
+          p2lost = player.lost + 1;
           p2r = player.rating;
           p2r1 = Math.pow(10, (p2r/400));
         }
@@ -139,23 +138,64 @@ $(document).ready(function() {
       // Sanity check
       console.log(p1 +"'s new rating is " + p1n + " and " + p2 + "'s new rating is " + p2n);
 
-      console.log("Testing here: " + dbRefTable.child(p1ID));
-
       // Write the new player ratings data to the Firebase DB
       var updates = {};
-      updates['/' + p1ID + '/rating'] = p1n;
-      updates['/' + p2ID + '/rating'] = p2n;
 
-      // Swap the view back to the table
-      $("#rankingView").show("slow");
-      $("#newResultView").hide("slow");
+      // Winner new data
+      updates['/players/' + p1ID + '/rating'] = p1n;
+      updates['/players/' + p1ID + '/played'] = p1played;
+      updates['/players/' + p1ID + '/won'] = p1won;
 
-      // Reset the player selects
-      $('select').prop('selectedIndex', 0);
+      // Loser new data
+      updates['/players/' + p2ID + '/rating'] = p2n;
+      updates['/players/' + p2ID + '/played'] = p2played;
+      updates['/players/' + p2ID + '/lost'] = p2lost;
 
-      return firebase.database().ref().update(updates);
+      // Record of the game consigned to history
+      var consignment = {
+        "date" : today,
+        "loser" : p2,
+        "winner" : p1
+      };
+      var gameNumber = data.results.length;
+
+      firebase.database().ref('/results/' + gameNumber).set(consignment);
+      firebase.database().ref().update(updates);
+
+      // Prevents undiagnosed empty scores
+      location.reload();
 
     });
+
+  });
+
+  $("#addPlayer").click(function() {
+
+    $(".helpText").remove();
+
+    var npName = $.trim($('#npName').val());
+    var npNationality = $.trim($('#npNationality').val());
+
+    // Some basic form validation
+    if ((npName == '') && (npNationality == '')) {
+      $('#npName').before("<p class=\"helpText\">Please enter the new player's <strong>name<strong></p>");
+      $('#npNationality').before("<p class=\"helpText\">Please enter the new player's <strong>nationality<strong></p>");
+    } else if (npName == '') {
+      $('#npName').before("<p class=\"helpText\">Please enter the new player's <strong>name<strong></p>");
+    } else if (npNationality == '') {
+      $('#npNationality').before("<p class=\"helpText\">Please enter the new player's <strong>nationality<strong></p>");
+    } else {
+      firebase.database().ref('/players/').push({
+        name: npName,
+        nationality: npNationality,
+        played: 0,
+        won: 0,
+        lost: 0,
+        rating: 1000
+      });
+      // Prevents undiagnosed empty rating for new results
+      location.reload();
+    }
 
   });
 
