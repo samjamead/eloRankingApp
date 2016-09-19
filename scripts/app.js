@@ -49,8 +49,22 @@ $(document).ready(function() {
     $('.playerOption').remove();
 
     function updateRatingTable() {
+
+      // Convert to object to array so we can sort by ranking
+      var rankedPlayers = [];
+      for (var player in data.players) {
+       rankedPlayers.push({
+         id:player,
+         name:data.players[player].name,
+         nationality: data.players[player].nationality,
+         won: data.players[player].won,
+         lost: data.players[player].lost,
+         rating:data.players[player].rating,
+       });
+      }
+      rankedPlayers.sort(function(x,y){return y.rating - x.rating});
       var rank = 1;
-      $.each(data.players, function(i, player) {
+      $.each(rankedPlayers, function(i, player) {
         $("#rankingTable tbody").append("<tr><td>" + rank + "</td><td>" + player.name + "</td><td>" + player.nationality + "</td><td>" + player.won + "</td><td>" + player.lost + "</td><td>" + player.rating + "</td></tr>");
         rank += 1;
       });
