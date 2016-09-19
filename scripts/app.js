@@ -71,6 +71,13 @@ $(document).ready(function() {
     }
     updateRatingTable();
 
+    function updateResultSelects() {
+      $.each(data.players, function(i, player){
+        $(".resultSelect").append("<option class=\"playerOption\" value=" + i + ">" + player.name + "</option>");
+      });
+    }
+    updateResultSelects();
+
     function updateResultsList() {
       $("#totalGames").append("Total games played: <strong>" + data.results.length + "<strong>" );
       var results = data.results;
@@ -80,13 +87,6 @@ $(document).ready(function() {
       });
     }
     updateResultsList();
-
-    function updateResultSelects() {
-      $.each(data.players, function(i, player){
-        $(".resultSelect").append("<option class=\"playerOption\" value=" + i + ">" + player.name + "</option>");
-      });
-    }
-    updateResultSelects();
 
     $("#submitResult").click(function() {
 
@@ -177,7 +177,7 @@ $(document).ready(function() {
       firebase.database().ref().update(updates);
 
       // Prevents undiagnosed empty scores
-      location.reload();
+      location.reload(true);
 
     });
 
@@ -208,7 +208,7 @@ $(document).ready(function() {
         rating: 1000
       });
       // Prevents undiagnosed empty rating for new results
-      location.reload();
+      location.reload(true);
     }
 
   });
