@@ -22,7 +22,6 @@ $(document).ready(function() {
 
   // But what day is it?!
   var date = new Date();
-
   today = (date.toDateString());
 
   var firebaseConfig = {
@@ -47,52 +46,56 @@ $(document).ready(function() {
     $("#totalGames").empty();
     $("#resultsHistory tbody").empty();
     $('.playerOption').remove();
+    var p1 = "";
+    var p2 = "";
 
-    function updateRatingTable() {
-
-      // Convert to object to array so we can sort by ranking
-      var rankedPlayers = [];
-      for (var player in data.players) {
-       rankedPlayers.push({
-         id:player,
-         name:data.players[player].name,
-         nationality: data.players[player].nationality,
-         won: data.players[player].won,
-         lost: data.players[player].lost,
-         rating:data.players[player].rating,
-       });
-      }
-      rankedPlayers.sort(function(x,y){return y.rating - x.rating});
-      var rank = 1;
-      $.each(rankedPlayers, function(i, player) {
-        $("#rankingTable tbody").append("<tr><td>" + rank + "</td><td>" + player.name + "</td><td>" + player.nationality + "</td><td>" + player.won + "</td><td>" + player.lost + "</td><td>" + player.rating + "</td></tr>");
-        rank += 1;
-      });
+    // Convert to object to array so we can sort by ranking
+    var rankedPlayers = [];
+    for (var player in data.players) {
+     rankedPlayers.push({
+       id:player,
+       name:data.players[player].name,
+       nationality: data.players[player].nationality,
+       won: data.players[player].won,
+       lost: data.players[player].lost,
+       rating:data.players[player].rating,
+     });
     }
-    updateRatingTable();
+    rankedPlayers.sort(function(x,y){return y.rating - x.rating});
+    var rank = 1;
+    $.each(rankedPlayers, function(i, player) {
+      $("#rankingTable tbody").append("<tr><td>" + rank + "</td><td>" + player.name + "</td><td>" + player.nationality + "</td><td>" + player.won + "</td><td>" + player.lost + "</td><td>" + player.rating + "</td></tr>");
+      rank += 1;
+    });
 
-    function updateResultSelects() {
-      $.each(data.players, function(i, player){
-        $(".resultSelect").append("<option class=\"playerOption\" value=" + i + ">" + player.name + "</option>");
-      });
+    $.each(data.players, function(i, player){
+      $(".resultSelect").append("<option class='playerOption' value=" + i + ">" + player.name + "</option>");
+    });
+
+    var gameHistory = [];
+    var results = data.results;
+    for (var result in results) {
+     gameHistory.push({
+       date: results[result].date,
+       winner: results[result].winner,
+       loser: results[result].loser,
+     });
     }
-    updateResultSelects();
+    gameHistory.reverse();
 
-    function updateResultsList() {
-      $("#totalGames").append("Total games played: <strong>" + data.results.length + "<strong>" );
-      var results = data.results;
-      results.reverse();
-      $.each(results, function(i, result) {
-        $("#resultsHistory tbody").append("<tr><td>" + result.date + "</td><td>&mdash;</td><td>" + result.winner + " beat " + result.loser + "</td></tr>");
-      });
-    }
-    updateResultsList();
+    var gameCount = gameHistory.length;
+    $("#totalGames").append("Total games played: <strong>" + gameCount + "<strong>" );
 
-    $("#submitResult").click(function() {
+    $.each(gameHistory, function(i, result) {
+      $("#resultsHistory tbody").append("<tr><td>" + result.date + "</td><td>&mdash;</td><td>" + result.winner + " beat " + result.loser + "</td></tr>");
+    });
 
+    $("#submitResult").off();
+    $("#submitResult").on('click', function(e) {
+      e.preventDefault;
       // Find out who beat who
-      var p1 = $( "#playerOne option:selected" ).text();
-      var p2 = $( "#playerTwo option:selected" ).text();
+      p1 = $( "#playerOne option:selected" ).text();
+      p2 = $( "#playerTwo option:selected" ).text();
 
       // Initialise some variables because scope
       var p1ID;
@@ -154,6 +157,17 @@ $(document).ready(function() {
 
       // Write the new player ratings data to the Firebase DB
       var updates = {};
+      var now = Date.now();
+
+      // Record of the game consigned to history
+      var gameNumber = gameCount + 1;
+      var consignment = {
+        "gameNumber" : gameNumber,
+        "date" : today,
+        "loser" : p2,
+        "winner" : p1
+      };
+      updates['/results/' + now] = consignment;
 
       // Winner new data
       updates['/players/' + p1ID + '/rating'] = p1n;
@@ -165,31 +179,19 @@ $(document).ready(function() {
       updates['/players/' + p2ID + '/played'] = p2played;
       updates['/players/' + p2ID + '/lost'] = p2lost;
 
-      // Record of the game consigned to history
-      var consignment = {
-        "date" : today,
-        "loser" : p2,
-        "winner" : p1
-      };
-      var gameNumber = data.results.length;
-
-      firebase.database().ref('/results/' + gameNumber).set(consignment);
       firebase.database().ref().update(updates);
 
-      // Prevents undiagnosed empty scores
-      location.reload(true);
+      $("#newResultView").hide("slow");
+      $("#rankingView").show("slow");
 
     });
 
-  });
+  }); // End of value event
 
   $("#addPlayer").click(function() {
-
     $(".helpText").remove();
-
     var npName = $.trim($('#npName').val());
     var npNationality = $.trim($('#npNationality').val());
-
     // Some basic form validation
     if ((npName == '') && (npNationality == '')) {
       $('#npName').before("<p class=\"helpText\">Please enter the new player's <strong>name<strong></p>");
@@ -207,10 +209,7 @@ $(document).ready(function() {
         lost: 0,
         rating: 1000
       });
-      // Prevents undiagnosed empty rating for new results
-      location.reload(true);
     }
-
   });
 
 });
