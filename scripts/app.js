@@ -76,6 +76,7 @@ $(document).ready(function() {
     var results = data.results;
     for (var result in results) {
      gameHistory.push({
+       gameNumber: results[result].gameNumber,
        date: results[result].date,
        winner: results[result].winner,
        loser: results[result].loser,
@@ -87,7 +88,7 @@ $(document).ready(function() {
     $("#totalGames").append("Total games played: <strong>" + gameCount + "<strong>" );
 
     $.each(gameHistory, function(i, result) {
-      $("#resultsHistory tbody").append("<tr><td>" + result.date + "</td><td>&mdash;</td><td>" + result.winner + " beat " + result.loser + "</td></tr>");
+      $("#resultsHistory tbody").append("<tr><td>" + result.gameNumber + "</td><td>" + result.date + "</td><td>&mdash;</td><td>" + result.winner + " beat " + result.loser + "</td></tr>");
     });
 
     $("#submitResult").off();
