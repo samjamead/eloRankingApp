@@ -1,0 +1,116 @@
+{
+  "players" : {
+    "-KS-rF1ErsAvHs0nbvIx" : {
+      "lost" : 0,
+      "name" : "Ben Lett",
+      "nationality" : "British",
+      "played" : 1,
+      "rating" : 1020,
+      "won" : 1
+    },
+    "-KS-rJF2LheZCUq53kVj" : {
+      "lost" : 1,
+      "name" : "Sam Mead",
+      "nationality" : "British",
+      "played" : 1,
+      "rating" : 980,
+      "won" : 0
+    },
+    "-KS-rMbFlKvzFXMG9f00" : {
+      "lost" : 0,
+      "name" : "Paddy Lee",
+      "nationality" : "Irish",
+      "played" : 0,
+      "rating" : 1000,
+      "won" : 0
+    },
+    "-KS-rR_2PdrGaWbwUNmz" : {
+      "lost" : 0,
+      "name" : "Fionn O Laoire",
+      "nationality" : "Irish",
+      "played" : 0,
+      "rating" : 1000,
+      "won" : 0
+    },
+    "-KS-rVpX_onSLHxhkHPw" : {
+      "lost" : 0,
+      "name" : "Justin Fifield",
+      "nationality" : "British",
+      "played" : 0,
+      "rating" : 1000,
+      "won" : 0
+    },
+    "-KS-ra-2em7fO5xQ104a" : {
+      "lost" : 0,
+      "name" : "David Beros",
+      "nationality" : "Croatian",
+      "played" : 0,
+      "rating" : 1000,
+      "won" : 0
+    },
+    "-KS_a9NPmF-GJhLsMpq0" : {
+      "lost" : 0,
+      "name" : "Hannah Goodchild",
+      "nationality" : "Grenada",
+      "played" : 0,
+      "rating" : 1000,
+      "won" : 0
+    },
+    "-KSdXcgmFDNfP44zwg1B" : {
+      "lost" : 0,
+      "name" : "Alex Chia",
+      "nationality" : "Singaporean",
+      "played" : 0,
+      "rating" : 1000,
+      "won" : 0
+    },
+    "-KSl7CLibw68w2AqfqpI" : {
+      "lost" : 0,
+      "name" : "Appin Williamson",
+      "nationality" : "Jersey",
+      "played" : 0,
+      "rating" : 1000,
+      "won" : 0
+    },
+    "-KUr9kUicOuehP8ZiK9j" : {
+      "lost" : 0,
+      "name" : "Judd Schmeissing",
+      "nationality" : "Australian",
+      "played" : 0,
+      "rating" : 1000,
+      "won" : 0
+    },
+    "-KVjMPlEhOXCuldCAWXL" : {
+      "lost" : 0,
+      "name" : "Katie Foster",
+      "nationality" : "Welsh",
+      "played" : 0,
+      "rating" : 1000,
+      "won" : 0
+    },
+    "-KVjRMtkxyTHi570EjIX" : {
+      "lost" : 0,
+      "name" : "Harry Edwards",
+      "nationality" : "British",
+      "played" : 0,
+      "rating" : 1000,
+      "won" : 0
+    },
+    "-KbjpbxzjLsAn8IKLxjQ" : {
+      "lost" : 0,
+      "name" : "Elizabeth Jury",
+      "nationality" : "British",
+      "played" : 0,
+      "rating" : 1000,
+      "won" : 0
+    }
+  },
+  "results" : {
+    "1487555731013" : {
+      "date" : "Thu Sep 08 2016",
+      "gameNumber" : 1,
+      "loser" : "Sam Mead",
+      "winner" : "Ben Lett"
+    }
+  }
+}
