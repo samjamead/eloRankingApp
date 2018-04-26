@@ -210,6 +210,8 @@ $(document).ready(function() {
         lost: 0,
         rating: 1000
       });
+      $("#newPlayerView").hide("slow");
+      $("#rankingView").show("slow");
     }
   });
 
